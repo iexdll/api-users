@@ -1,0 +1,4 @@
+bind_addr = ":8083"
+log_level = "debug"
+database_url = "host=192.168.99.100 port=5432 dbname=restapi sslmode=disable user=postgres password=qwerty"
+session_key = "secret"

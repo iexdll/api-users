@@ -1,0 +1,45 @@
+version: '3.3'
+
+services:
+
+  goapp:
+    build: ./
+    ports:
+      - 8089:8089
+    depends_on:
+      - db
+    environment:
+      - DB_USER=postgres
+      - DB_PASSWORD=qwerty
+
+  db:
+    restart: always
+    image: postgres:latest
+    environment:
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=qwerty
+    ports:
+      - 5432:5432
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+
+  pgadmin:
+    image: dpage/pgadmin4
+    depends_on:
+      - db
+    ports:
+      - 5555:80
+    environment:
+      PGADMIN_DEFAULT_EMAIL: admin@localhost.ru
+      PGADMIN_DEFAULT_PASSWORD: qwerty
+    restart: unless-stopped
+
+volumes:
+  pgdata:
+
+#docker volume create --name pgdata
+#docker run --rm -v pgdata:/volume -v ./backup:/backup busybox sh -c 'cp -r /volume /backup'
+#docker run --rm -v pgdata:/volume -v C:\backup:/backup alpine tar -cjf /backup/pgdata.tar.bz2 -C /volume ./
+#https://jareklipski.medium.com/backup-restore-docker-named-volumes-350397b8e362
+#
+#docker-compose up --build goapp
